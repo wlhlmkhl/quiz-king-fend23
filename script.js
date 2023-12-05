@@ -1,13 +1,19 @@
+// buttons
 let startBtn = document.querySelector("#start-btn");
 let nextBtn = document.querySelector("#next-btn");
+let resultBtn = document.querySelector("#result-btn");
+// divs & other
 let questionText = document.querySelector("#question-text");
 let answerContainer = document.querySelector("#answer-container");
 let title = document.querySelector("#title");
-
+// global variables and functions
 let currentIndex = 0;
 let rightAnswers = [];
 function updateTitle(){
     title.textContent= `Question ${currentIndex + 1} of ${questions.length}`
+};
+function createBtn (array, type){
+
 }
 //Start Game!
 startBtn.addEventListener("click", startGame);
@@ -16,11 +22,14 @@ function startGame(){
     nextBtn.classList.remove("hide");
     questionText.classList.remove("hide");
     updateTitle();
+    currentIndex = 0;
+    answerContainer.innerHTML ="";
     showQuestion(currentIndex);
 };
 
 //Function for question
 function showQuestion(index){
+
     questionText.textContent = questions[index].question;
     questions[index].answers.forEach((answer)=>{
         let btn = document.createElement("button");
@@ -31,15 +40,7 @@ function showQuestion(index){
         nextBtn.classList.add("hide");
 
     })};
-// Display next question
-
-// if (shuffledQuestions.length > currentQuestionIndex + 1) {
-//     nextButton.classList.remove('hide')
-//   } else {
-//     startButton.innerText = 'Restart'
-//     startButton.classList.remove('hide')
-//   }
-// }
+//display next question
 nextBtn.addEventListener("click", nextQuestion);
 function nextQuestion(){
         currentIndex++;
@@ -51,17 +52,17 @@ function nextQuestion(){
 };
 //Capture the right answer
 answerContainer.addEventListener("click", (event)=>{
-let ans = event.target.value;
 //1. Disable alla sibilings
 
 //2. Ta bort classen selected från alla siblings
-
 event.target.classList.add("selected");
 
 if(questions.length === currentIndex + 1){
 
     startBtn.textContent = 'Restart';
-    startBtn.classList.remove("remove");
+    startBtn.classList.remove("hide");
+
+
 }
 else{
     nextBtn.classList.remove("hide");
