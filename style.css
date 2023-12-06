@@ -27,15 +27,37 @@ body {
         padding: 10px;
         font-size: 16px;
         cursor: pointer;
-        background-color: blue;
-        color: whitesmoke;
+        background-color: lightgrey;
+        color: black;
         border-radius: 5px;
+}
+.btn:hover{
+/* Using rgba to darken lightgrey by 10% */
+background: rgba(169, 169, 169, 0.9); /* 90% opacity */
+}
+.next-btn{
+    background-color: blue;
+    color: whitesmoke;
+
+}
+.start-btn{
+    height: 50px;
+    width: 80px;
+    font-weight: bold;
 }
 
 #question-text {
     font-weight: bold;
     font-size:30px;
 }
-.selected {
+.correct {
     background-color: green;
+    color: whitesmoke;
+
 }
+.incorrect{
+    background-color: red;
+    color: whitesmoke;
+
+}
+

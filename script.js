@@ -8,13 +8,30 @@ let answerContainer = document.querySelector("#answer-container");
 let title = document.querySelector("#title");
 // global variables and functions
 let currentIndex = 0;
-let rightAnswers = [];
+let rightAnswers = 0;
+
 function updateTitle(){
     title.textContent= `Question ${currentIndex + 1} of ${questions.length}`
 };
-function createBtn (array, type){
+function processAnswer(elem){
+    //get siblings and selected
+    let siblings = Array.from(elem.target.parentNode.children).filter(function (sibling) {
+        return sibling !== elem.target;});
+    let selected = elem.target;
+    //give class
+        if(selected.value === "true"){
+            selected.classList.add("correct");
+            rightAnswers++;
+        }
+        else{
+            selected.classList.add("incorrect");
+        }
+    siblings.forEach((sibling)=>{
+        sibling.disabled = true;
+    })
+    
+};
 
-}
 //Start Game!
 startBtn.addEventListener("click", startGame);
 function startGame(){
@@ -51,22 +68,14 @@ function nextQuestion(){
     
 };
 //Capture the right answer
-answerContainer.addEventListener("click", (event)=>{
+answerContainer.addEventListener("click", (elem)=>{
 //1. Disable alla sibilings
-
+processAnswer(elem);
 //2. Ta bort classen selected från alla siblings
-event.target.classList.add("selected");
-
 if(questions.length === currentIndex + 1){
-
     startBtn.textContent = 'Restart';
     startBtn.classList.remove("hide");
-
-
 }
-else{
+else
     nextBtn.classList.remove("hide");
-}
-
-
 });
