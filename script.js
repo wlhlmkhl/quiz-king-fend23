@@ -8,7 +8,7 @@ let answerContainer = document.querySelector("#answer-container");
 let title = document.querySelector("#title");
 // global variables and functions
 let currentIndex = 0;
-let rightAnswers = 0;
+let playersAnswers = [];
 let counter = 0;
 
 function updateTitle(){
@@ -20,7 +20,6 @@ function processAnswer1(elem, counter){
     //give class
     if(selected.value === "true"){
         selected.classList.add("correct");
-        rightAnswers++;
     }
     else{
         selected.classList.add("incorrect");
@@ -37,21 +36,25 @@ function processAnswer1(elem, counter){
 function processAnswer2(elem){
     let siblings = Array.from(elem.target.parentNode.children);
     let selected = elem.target;
-    const maxSelections = 2;
+    const maxSelections = siblings.filter((sibling)=>{
+        if(sibling.value === "true"){return sibling;}}).length;
     if (counter < maxSelections) {
 
         if (selected.value === "true") {
             selected.classList.add("correct");
-        } else {
+        } 
+        else {
             selected.classList.add("incorrect");
         };
         counter++;
 
-        // Disable the selected button after processing the answer
+        // behövs denna?
         selected.disabled = true;
     }
     else if(counter===maxSelections){
-        console.log("blipp");
+        siblings.forEach((sibling) => {
+            sibling.disabled = true;});
+        counter = 0;
     };
     
 
@@ -77,7 +80,7 @@ function showQuestion(index){
     questionText.textContent = questions[index].question;
     questions[index].answers.forEach((answer)=>{
         let btn = document.createElement("button");
-        btn.classList.add("btn");
+        btn.classList.add("btn","answer-btn");
         btn.innerHTML = answer.text;
         btn.value = answer.correct;
         btn.dataset.type = questions[index].type;
@@ -85,26 +88,30 @@ function showQuestion(index){
         nextBtn.classList.add("hide");
 
     })};
-//display next question
+//display next question & store answers
 nextBtn.addEventListener("click", nextQuestion);
-function nextQuestion(){
+function nextQuestion(){  
+        let answers = Array.from(document.querySelectorAll(".answer-btn"));
         currentIndex++;
         updateTitle();
         answerContainer.innerHTML="";
         showQuestion(currentIndex);
+        console.log(answers);
     
     
 };
-//Capture the right answer
+//Capture answer
 answerContainer.addEventListener("click", (elem)=>{
 if(elem.target!==answerContainer){
-
+// Identify which type of question
     if(elem.target.dataset.type ==="multiChoice"){
         processAnswer2(elem);
     }
     else{
         processAnswer1(elem);
     }
+
+    // Next Button or Restart button
     if(questions.length === currentIndex + 1){
         startBtn.textContent = 'Restart';
         startBtn.classList.remove("hide");
