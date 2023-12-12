@@ -15,6 +15,11 @@ function updateTitle(){
     title.textContent= `Question ${currentIndex + 1} of ${questions.length}`
 };
 
+function getAnswers(){
+    let Answer = document.querySelectorAll(".correct, .incorrect");
+    console.log(Answer);
+    
+};
 function processAnswer1(elem, counter){
     let selected = elem.target;
     //give class
@@ -68,6 +73,8 @@ function startGame(){
     currentIndex = 0;
     updateTitle();
     startBtn.classList.add("hide");
+    resultBtn.classList.add("hide");
+
     nextBtn.classList.remove("hide");
     questionText.classList.remove("hide");
     answerContainer.innerHTML ="";
@@ -91,17 +98,18 @@ function showQuestion(index){
 //display next question & store answers
 nextBtn.addEventListener("click", nextQuestion);
 function nextQuestion(){  
-        let answers = Array.from(document.querySelectorAll(".answer-btn"));
+
+        getAnswers();
         currentIndex++;
         updateTitle();
         answerContainer.innerHTML="";
         showQuestion(currentIndex);
-        console.log(answers);
     
     
 };
 //Capture answer
 answerContainer.addEventListener("click", (elem)=>{
+//Only buttons
 if(elem.target!==answerContainer){
 // Identify which type of question
     if(elem.target.dataset.type ==="multiChoice"){
@@ -115,6 +123,7 @@ if(elem.target!==answerContainer){
     if(questions.length === currentIndex + 1){
         startBtn.textContent = 'Restart';
         startBtn.classList.remove("hide");
+        resultBtn.classList.remove("hide");
     }
     else
     nextBtn.classList.remove("hide");
