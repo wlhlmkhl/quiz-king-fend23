@@ -15,11 +15,35 @@ function updateTitle(){
     title.textContent= `Question ${currentIndex + 1} of ${questions.length}`
 };
 
-function getAnswers(){
-    let Answer = document.querySelectorAll(".correct, .incorrect");
-    console.log(Answer);
-    
+function getAnswers() {
+    let answers = Array.from(document.querySelectorAll(".correct, .incorrect"));
+
+    let correctAnswers = answers.filter(answer => answer.classList.contains("correct"));
+    let incorrectAnswers = answers.filter(answer => answer.classList.contains("incorrect"));
+
+    let answerArraySize = Math.min(4, correctAnswers.length + incorrectAnswers.length);
+// boolean som kollar att antalet rätt är lika stor som arrayen och inga incorrect.
+    let allCorrect = correctAnswers.length === answerArraySize && incorrectAnswers.length === 0;
+
+
+    let answerObject = {
+        question: questionText.textContent,
+        answers: Array.from({ length: answerArraySize }, (_, index) => {
+            return {
+                text: answers[index].textContent, 
+                correct: answers[index].classList.contains("correct"),
+            };
+        }),
+        allCorrect: allCorrect,
+    };
+
+    playersAnswers.push(answerObject); // Push answerObject into playersAnswers array
+    console.log(answerObject);
+
+    return answerObject;
 };
+
+
 function processAnswer1(elem, counter){
     let selected = elem.target;
     //give class
@@ -129,3 +153,29 @@ if(elem.target!==answerContainer){
     nextBtn.classList.remove("hide");
 };
 });
+function showResults(){
+    getAnswers();
+    title.classList.add("hide");
+    questionText.classList.add("hide");
+    resultBtn.classList.add("hide");
+
+    answerContainer.innerHTML="";
+    let pointsCounter = 0;
+
+    playersAnswers.forEach((object)=>{
+        let text = document.createElement("p");
+        text.textContent = object.question;
+        object.answers.forEach((answer)=>{
+            text.textContent += answer.text 
+            if(answer.correct){
+                console.log("blipp");
+            }
+        })
+        
+
+        answerContainer.appendChild(text);
+    })
+
+    
+};
+resultBtn.addEventListener("click", showResults);

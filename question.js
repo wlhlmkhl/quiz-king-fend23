@@ -22,7 +22,7 @@ const questions = [
 
     {   
         type:"multiChoice",
-        question: 'Which two langues does Wille Speak',
+        question: 'Which two langues does Wille Speak?',
         answers: [
             { text: 'Finnish', correct: false },
             { text: 'Swedish', correct: true },
