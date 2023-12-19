@@ -145,8 +145,6 @@ if(elem.target!==answerContainer){
 
     // Next Button or Restart button
     if(questions.length === currentIndex + 1){
-        startBtn.textContent = 'Restart';
-        startBtn.classList.remove("hide");
         resultBtn.classList.remove("hide");
     }
     else
@@ -154,28 +152,69 @@ if(elem.target!==answerContainer){
 };
 });
 function showResults(){
+
     getAnswers();
-    title.classList.add("hide");
+    title.textContent ="Results!"
     questionText.classList.add("hide");
     resultBtn.classList.add("hide");
-
+    startBtn.textContent = 'Restart';
+    startBtn.classList.remove("hide");
     answerContainer.innerHTML="";
+
     let pointsCounter = 0;
 
     playersAnswers.forEach((object)=>{
         let text = document.createElement("p");
         text.textContent = object.question;
         object.answers.forEach((answer)=>{
-            text.textContent += answer.text 
-            if(answer.correct){
-                console.log("blipp");
-            }
-        })
-        
-
+            text.textContent += " "+ answer.text;
+        });
+        if(object.allCorrect){
+         text.style.color ="green";
+         pointsCounter++;
+        }
+        else{
+         text.style.color="red";
+        }
         answerContainer.appendChild(text);
     })
+    //display score
+    let scorePercentage = (pointsCounter/playersAnswers.length)*100;
+    let passOrFailed;
+    let scoreDisplay = document.createElement("p");
+    let scoreBox = document.createElement("div")
+    if (scorePercentage < 50) {
+        passOrFailed = "Failed!";
+        scoreBox.classList.add("failed"); // Lägg till klassen "failed" för styling.
+    } else if (scorePercentage >= 50 && scorePercentage <= 75) {
+        passOrFailed = "Good job!";
+        scoreBox.classList.add("good-job"); // Lägg till klassen "good-job" för styling.
+    } else {
+        passOrFailed = "Excellent work!";
+        scoreBox.classList.add("excellent-work"); // Lägg till klassen "excellent-work" för styling.
+    }
+    scoreDisplay.textContent = `${passOrFailed} Score: ${pointsCounter} out of ${playersAnswers.length}.`
 
+    scoreBox.classList.add("scoreBox")
+    scoreBox.append(scoreDisplay);
+    answerContainer.append(scoreBox);
     
 };
 resultBtn.addEventListener("click", showResults);
+
+// Light mode och Dark mode
+
+// Hämta radioknapparna
+let lightBtn = document.getElementById("lightBtn");
+let darkBtn = document.getElementById("darkBtn");
+
+// Lyssna på ändringar i radioknapparna
+lightBtn.addEventListener("change", function() {
+    document.body.classList.remove("dark-mode");
+    document.body.classList.add("light-mode");
+});
+
+darkBtn.addEventListener("change", function() {
+    document.body.classList.remove("light-mode");
+    document.body.classList.add("dark-mode");
+});
