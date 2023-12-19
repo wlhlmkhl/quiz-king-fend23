@@ -64,10 +64,12 @@ function processAnswer1(elem, counter){
 };
 function processAnswer2(elem){
     let siblings = Array.from(elem.target.parentNode.children);
+    let correctSiblings = siblings.filter((sibling) => sibling.value === "true");
     let selected = elem.target;
-    const maxSelections = siblings.filter((sibling)=>{
-        if(sibling.value === "true"){return sibling;}}).length;
-    if (counter < maxSelections) {
+    const maxSelections = correctSiblings.length;
+    let selectedCount = siblings.filter((sibling) => sibling.classList.contains("correct") && sibling.disabled).length;
+
+    if (selectedCount < maxSelections) {
 
         if (selected.value === "true") {
             selected.classList.add("correct");
@@ -80,7 +82,7 @@ function processAnswer2(elem){
         // behövs denna?
         selected.disabled = true;
     }
-    else if(counter===maxSelections){
+    else if(selectedCount===maxSelections){
         siblings.forEach((sibling) => {
             sibling.disabled = true;});
         counter = 0;
@@ -109,6 +111,12 @@ function startGame(){
 function showQuestion(index){
 
     questionText.textContent = questions[index].question;
+    if(questions[index].type==="multiChoice"){
+        questionText.textContent += " (select all that apply)"
+    }
+    else{
+        questionText.textContent += " (select one)"
+    }
     questions[index].answers.forEach((answer)=>{
         let btn = document.createElement("button");
         btn.classList.add("btn","answer-btn");
